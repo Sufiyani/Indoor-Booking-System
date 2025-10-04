@@ -1,0 +1,52 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+const PadelGround = () => {
+  const navigate = useNavigate();
+
+  // Sample image URLs (replace with actual URLs)
+  const courtImages = [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiQ45ar7adiXty0vDaKpTFYVZtJcmC3PltHQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiQ45ar7adiXty0vDaKpTFYVZtJcmC3PltHQ&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiQ45ar7adiXty0vDaKpTFYVZtJcmC3PltHQ&s",
+  ];
+
+  return (
+    <div id="padel-ground" className="py-16 px-6 bg-transparent mt-15">
+      <div className="w-[90%] mx-auto text-center">
+        {/* Heading */}
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-8">
+          Padel Court Gallery
+        </h1>
+
+        {/* Images */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {courtImages.map((url, index) => (
+            <div
+              key={index}
+              className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-2 border border-white/20"
+            >
+              <img
+                src={url}
+                alt={`Padel Court ${index + 1}`}
+                className="rounded-lg w-full h-64 object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Book Button */}
+        <div className="text-center mt-6">
+          <button
+            onClick={() => navigate("/padel")}
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-orange-500/50 transition duration-300"
+          >
+            Book Padel Court Now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PadelGround;
