@@ -1,15 +1,3 @@
-// import express from "express";
-// import { adminLogin, getAdminProfile } from "../controllers/adminController.js";
-// import { verifyToken, isAdmin } from "../middlewares/auth.js";
-
-// const router = express.Router();
-
-// router.post("/login", adminLogin);
-// router.get("/profile", verifyToken, isAdmin, getAdminProfile);
-
-// export default router;
-
-
 import express from "express";
 import { adminLogin, getAdminProfile } from "../controllers/adminController.js";
 import { verifyToken, isAdmin } from "../middlewares/auth.js";
