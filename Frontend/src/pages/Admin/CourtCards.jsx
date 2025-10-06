@@ -13,19 +13,19 @@ const GalleryCards = () => {
       title: "Cricket",
       image: cricketImg,
       description: "Experience cricket like never before on our premium grounds",
-      path: "/admin/view-booking-page",
+      path: "/admin/view-cricket-booking-page",
     },
     {
       title: "Futsal",
       image: futsalImg,
       description: "Fast-paced action on our state-of-the-art futsal courts",
-      path: "/admin/view-futsal-page",
+      path: "/admin/view-futsal-booking-page",
     },
     {
       title: "Padel",
       image: padelImg,
       description: "Discover the thrill of padel on professional courts",
-      path: "/admin/view-padel-page",
+      path: "/admin/view-padel-booking-page",
     },
   ];
 

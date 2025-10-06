@@ -8,6 +8,7 @@ const padelBookingSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   paymentMethod: { type: String, required: true, enum: ['Cash', 'Online'] },
+  paymentStatus: { type: String, required: true, enum: ['Paid', 'Unpaid'], default: 'Unpaid' },
   createdAt: { type: Date, default: Date.now },
 });
 

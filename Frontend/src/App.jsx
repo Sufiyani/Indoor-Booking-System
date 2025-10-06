@@ -91,7 +91,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/gallery"
+            path="/admin/courtcards"
             element={
               <ProtectedRoute>
                 <AdminCourtCards />
@@ -99,7 +99,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/view-booking-page"
+            path="/admin/view-cricket-booking-page"
             element={
               <ProtectedRoute>
                 <ViewCricketBooking />
@@ -107,7 +107,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/view-futsal-page"
+            path="/admin/view-futsal-booking-page"
             element={
               <ProtectedRoute>
                 <ViewFutsalBooking />
@@ -115,7 +115,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin/view-padel-page"
+            path="/admin/view-padel-booking-page"
             element={
               <ProtectedRoute>
                 <ViewPadelBooking />

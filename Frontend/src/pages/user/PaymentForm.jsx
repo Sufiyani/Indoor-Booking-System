@@ -45,20 +45,21 @@ const PaymentPage = () => {
         name: formData.name,
         email: formData.email,
         paymentMethod: formData.paymentMethod,
+        paymentStatus: "Paid",
         ...booking,
       };
 
       const res = await createBooking(payload);
       if (res.success) {
         setPaymentDone(true);
-        alert("✅ Payment successful and booking confirmed!");
+        alert("Payment successful and booking confirmed!");
         localStorage.removeItem("pendingBooking");
       } else {
-        alert("⚠️ Booking failed. Try again later.");
+        alert("Booking failed. Try again later.");
       }
     } catch (error) {
       console.error(error);
-      alert("❌ Error creating booking. Check console for details.");
+      alert("Error creating booking. Check console for details.");
     }
   };
 
@@ -67,12 +68,12 @@ const PaymentPage = () => {
       console.log("Starting PDF generation...");
       
       if (!booking) {
-        alert("❌ No booking data available!");
+        alert("No booking data available!");
         return;
       }
 
       if (!formData.name || !formData.email) {
-        alert("❌ User information missing!");
+        alert("User information missing!");
         return;
       }
 
@@ -92,15 +93,13 @@ const PaymentPage = () => {
 
       for (let i = 1; i < sortedSlots.length; i++) {
         if (sortedSlots[i] === sortedSlots[i - 1] + 1) {
-          // Continuous slot, add to current group
           currentGroup.push(sortedSlots[i]);
         } else {
-          // Gap found, save current group and start new one
           groupedSlots.push(currentGroup);
           currentGroup = [sortedSlots[i]];
         }
       }
-      groupedSlots.push(currentGroup); // Add last group
+      groupedSlots.push(currentGroup);
 
       // Convert grouped slots to time ranges
       const bookedTimeSlots = groupedSlots.map(group => {
@@ -113,7 +112,7 @@ const PaymentPage = () => {
 
       console.log("Drawing PDF design...");
       
-      // Simple header
+      // Header
       page.drawText("BOOKING CONFIRMATION", {
         x: 50,
         y: 700,
@@ -197,6 +196,22 @@ const PaymentPage = () => {
         color: rgb(0, 0, 0),
       });
 
+      yPos -= 25;
+      page.drawText("Payment Status:", {
+        x: 70,
+        y: yPos,
+        size: 12,
+        font: fontBold,
+        color: rgb(0.4, 0.4, 0.4),
+      });
+      page.drawText("Paid", {
+        x: 200,
+        y: yPos,
+        size: 12,
+        font: fontRegular,
+        color: rgb(0, 0.6, 0),
+      });
+
       // Booking Details
       yPos -= 50;
       page.drawText("Booking Details", {
@@ -248,7 +263,6 @@ const PaymentPage = () => {
         color: rgb(0.4, 0.4, 0.4),
       });
 
-      // Show each slot individually
       yPos -= 22;
       bookedTimeSlots.forEach((slot, index) => {
         page.drawText(`${index + 1}. ${slot}`, {
@@ -295,20 +309,18 @@ const PaymentPage = () => {
       link.href = url;
       link.download = `BookingConfirmation_${Date.now()}.pdf`;
       
-      // Append to body, click, then remove
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       
-      // Cleanup
       setTimeout(() => URL.revokeObjectURL(url), 100);
       
-      console.log("✅ PDF downloaded successfully!");
-      alert("✅ PDF downloaded successfully!");
+      console.log("PDF downloaded successfully!");
+      alert("PDF downloaded successfully!");
       
     } catch (error) {
-      console.error("❌ Error generating PDF:", error);
-      alert(`❌ Failed to generate PDF: ${error.message}`);
+      console.error("Error generating PDF:", error);
+      alert(`Failed to generate PDF: ${error.message}`);
     }
   };
 
@@ -386,7 +398,7 @@ const PaymentPage = () => {
           ) : (
             <div className="text-center">
               <h2 className="text-2xl text-green-400 font-bold mb-4">
-                ✅ Payment Successful!
+                Payment Successful!
               </h2>
               <p className="text-gray-300 mb-6">
                 Your booking has been confirmed successfully.
@@ -408,3 +420,4 @@ const PaymentPage = () => {
 };
 
 export default PaymentPage;
+
