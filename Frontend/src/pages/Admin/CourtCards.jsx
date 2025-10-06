@@ -30,7 +30,7 @@ const GalleryCards = () => {
   ];
 
   return (
-    <div id="gallery" className="py-16 px-6 bg-transparent ml-15 mr-15">
+    <div id="gallery" className="py-16 px-6 bg-transparent ml-15 mr-15 mt-15">
       <div className="w-[90%] mx-auto text-center mb-12">
         <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-3">
           Choose Your Game

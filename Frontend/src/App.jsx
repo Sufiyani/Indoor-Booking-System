@@ -19,6 +19,8 @@ import CricketPage from "./pages/user/Cricket";
 import FutsalPage from "./pages/user/Futsal";
 import PadelPage from "./pages/user/Padel";
 
+import PaymentMethodForm from './pages/user/PaymentForm'
+
 // Admin
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -32,7 +34,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   const location = useLocation();
-  
+
   const isHome = location.pathname === "/";
   const isAdminDashboard = location.pathname === "/admin/dashboard";
 
@@ -66,6 +68,9 @@ const App = () => {
           <Route path="/futsal" element={<FutsalPage />} />
           <Route path="/padel" element={<PadelPage />} />
 
+          {/* PaymentForm */}
+          <Route path="/payment-method" element={<PaymentMethodForm />} />
+
           {/* Admin routes */}
           {/* <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -76,55 +81,55 @@ const App = () => {
 
 
           {/* Admin routes */}
-<Route path="/admin/login" element={<AdminLogin />} />
-<Route 
-  path="/admin/dashboard" 
-  element={
-    <ProtectedRoute>
-      <AdminDashboard />
-    </ProtectedRoute>
-  } 
-/>
-<Route 
-  path="/admin/gallery" 
-  element={
-    <ProtectedRoute>
-      <AdminCourtCards />
-    </ProtectedRoute>
-  } 
-/>
-<Route 
-  path="/admin/view-booking-page" 
-  element={
-    <ProtectedRoute>
-      <ViewCricketBooking />
-    </ProtectedRoute>
-  } 
-/>
-<Route 
-  path="/admin/view-futsal-page" 
-  element={
-    <ProtectedRoute>
-      <ViewFutsalBooking />
-    </ProtectedRoute>
-  } 
-/>
-<Route 
-  path="/admin/view-padel-page" 
-  element={
-    <ProtectedRoute>
-      <ViewPadelBooking />
-    </ProtectedRoute>
-  } 
-/>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/gallery"
+            element={
+              <ProtectedRoute>
+                <AdminCourtCards />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/view-booking-page"
+            element={
+              <ProtectedRoute>
+                <ViewCricketBooking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/view-futsal-page"
+            element={
+              <ProtectedRoute>
+                <ViewFutsalBooking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/view-padel-page"
+            element={
+              <ProtectedRoute>
+                <ViewPadelBooking />
+              </ProtectedRoute>
+            }
+          />
 
         </Routes>
       </div>
 
       {/* Footer with conditional props */}
-      <FooterSection 
-        showAdmin={isHome} 
-        showAdminLogout={isAdminDashboard} 
+      <FooterSection
+        showAdmin={isHome}
+        showAdminLogout={isAdminDashboard}
       />
     </div>
   );

@@ -1,6 +1,1249 @@
+// import React, { useState, useRef, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+
+// const Padel = () => {
+//   const navigate = useNavigate();
+
+//   const years = [2023, 2024, 2025];
+//   const months = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December"
+//   ];
+
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+//   const [selectedDate, setSelectedDate] = useState(null);
+//   const [selectedSlots, setSelectedSlots] = useState([]);
+//   const [bookedSlots, setBookedSlots] = useState({});
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [showBookedPopup, setShowBookedPopup] = useState(false);
+//   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+//   const slotsRef = useRef(null);
+
+//   // ✅ Load booked slots from localStorage
+//   useEffect(() => {
+//     const savedSlots = JSON.parse(localStorage.getItem("padelBookedSlots")) || {};
+//     setBookedSlots(savedSlots);
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedDate && slotsRef.current) {
+//       slotsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+//     }
+//   }, [selectedDate]);
+
+//   const handleSlotClick = (index) => {
+//     const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//     const bookedForDate = bookedSlots[key] || [];
+
+//     if (bookedForDate.includes(index)) {
+//       setShowBookedPopup(true);
+//       return;
+//     }
+
+//     if (selectedSlots.includes(index)) {
+//       setSelectedSlots(selectedSlots.filter((slot) => slot !== index));
+//     } else {
+//       if (selectedSlots.length >= 3) {
+//         setShowPopup(true);
+//         return;
+//       }
+//       setSelectedSlots([...selectedSlots, index]);
+//     }
+//   };
+
+//   // ✅ Save booking data and redirect to Payment Page
+//   const handleConfirmBooking = () => {
+//     const bookingData = {
+//       year: selectedYear,
+//       month: selectedMonth,
+//       date: selectedDate,
+//       slots: selectedSlots,
+//       court: "Padel",
+//     };
+//     localStorage.setItem("pendingBooking", JSON.stringify(bookingData));
+//     setShowConfirmPopup(false);
+//     navigate("/payment-method"); // ✅ Redirect
+//   };
+
+//   const generateCalendar = (year, month) => {
+//     const firstDay = new Date(year, month, 1).getDay();
+//     const daysInMonth = new Date(year, month + 1, 0).getDate();
+//     const calendar = [];
+//     let week = [];
+
+//     for (let i = 0; i < firstDay; i++) week.push(null);
+//     for (let day = 1; day <= daysInMonth; day++) {
+//       week.push(day);
+//       if (week.length === 7) {
+//         calendar.push(week);
+//         week = [];
+//       }
+//     }
+//     if (week.length > 0) {
+//       while (week.length < 7) week.push(null);
+//       calendar.push(week);
+//     }
+//     return calendar;
+//   };
+
+//   const calendar = generateCalendar(selectedYear, selectedMonth);
+
+//   const timeSlots = Array.from({ length: 24 }, (_, i) => {
+//     const start = i % 12 === 0 ? 12 : i % 12;
+//     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
+//     const ampmStart = i < 12 ? "AM" : "PM";
+//     const ampmEnd = i + 1 < 12 ? "AM" : "PM";
+//     return `${start} ${ampmStart} - ${end} ${ampmEnd}`;
+//   });
+
+//   const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//   const bookedForDate = bookedSlots[key] || [];
+
+//   return (
+//     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
+//       {/* Sidebar */}
+//       <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
+//         <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Select Year</h2>
+//         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
+//           {years.map((year) => (
+//             <button
+//               key={year}
+//               onClick={() => { setSelectedYear(year); setSelectedDate(null); }}
+//               className={`px-4 py-2 rounded-lg ${selectedYear === year ? "bg-gradient-to-r from-orange-600 to-red-600" : "bg-gray-700"}`}
+//             >
+//               {year}
+//             </button>
+//           ))}
+//         </div>
+
+//         <h2 className="text-xl font-semibold mb-3 text-center md:text-left">Months</h2>
+//         <ul className="space-y-2 flex flex-wrap gap-2 justify-center md:block">
+//           {months.map((month, index) => (
+//             <li
+//               key={index}
+//               onClick={() => { setSelectedMonth(index); setSelectedDate(null); }}
+//               className={`cursor-pointer px-3 py-2 rounded-lg ${selectedMonth === index ? "bg-orange-600 text-white" : "hover:bg-gray-700"}`}
+//             >
+//               {month}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {/* Main Content */}
+//       <div className="md:w-3/4 w-full p-4 md:p-8">
+//         <h1 className="mt-4 text-3xl sm:text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-6 text-center">
+//           Padel Gallery
+//         </h1>
+//         <p className="text-sm sm:text-lg text-white max-w-2xl text-center mx-auto mb-6">
+//           Padel is a fast-paced, social sport that combines tennis and squash on an enclosed court.
+//         </p>
+
+//         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">
+//           {months[selectedMonth]} {selectedYear}
+//         </h2>
+
+//         {/* Calendar */}
+//         <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
+//           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+//             <div key={day} className="font-semibold text-orange-400 text-xs sm:text-sm">{day}</div>
+//           ))}
+//           {calendar.map((week, i) =>
+//             week.map((day, j) => (
+//               <div
+//                 key={`${i}-${j}`}
+//                 onClick={() => day && setSelectedDate(day)}
+//                 className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm
+//                   ${day ? "bg-gray-800 hover:bg-orange-600 cursor-pointer" : ""} 
+//                   ${selectedDate === day ? "bg-black" : ""}`}
+//               >
+//                 {day || ""}
+//               </div>
+//             ))
+//           )}
+//         </div>
+
+//         {/* Slots Section */}
+//         {selectedDate && (
+//           <div ref={slotsRef} className="w-full mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+//             {/* Time Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">
+//                 Time Slots - {months[selectedMonth]} {selectedDate}, {selectedYear}
+//               </h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {timeSlots.map((slot, index) => (
+//                   <li key={index} className="h-8 sm:h-10 px-2 py-1 rounded bg-gray-800 hover:bg-orange-600 cursor-pointer">
+//                     {slot}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+
+//             {/* Available Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Available Slots</h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {Array(24).fill(null).map((_, index) => (
+//                   <li
+//                     key={index}
+//                     onClick={() => handleSlotClick(index)}
+//                     className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-pointer 
+//                     ${selectedSlots.includes(index) ? "bg-orange-600 text-white font-bold" : "hover:bg-orange-600"} 
+//                     ${bookedForDate.includes(index) ? "bg-gray-700 cursor-not-allowed" : ""}`}
+//                   >
+//                     {selectedSlots.includes(index) || bookedForDate.includes(index) ? <span className="text-sm sm:text-2xl">🎾</span> : ""}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+
+//             {/* Booked Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Booked Slots</h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {Array(24).fill(null).map((_, index) => (
+//                   <li
+//                     key={index}
+//                     className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-not-allowed 
+//                     ${bookedForDate.includes(index) ? "bg-orange-600 text-white font-bold" : ""}`}
+//                   >
+//                     {bookedForDate.includes(index) ? <span className="text-sm sm:text-2xl">🎾</span> : ""}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Book Now Button */}
+//         {selectedSlots.length > 0 && (
+//           <div className="mt-4 text-center sm:text-end">
+//             <button
+//               onClick={() => setShowConfirmPopup(true)}
+//               className="px-6 py-2 sm:px-6 sm:py-3 bg-orange-600 hover:bg-orange-700 rounded-lg font-semibold transition"
+//             >
+//               Book Now
+//             </button>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* ✅ Confirmation Popup */}
+//       {showConfirmPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Confirm Booking</h2>
+//             <p>Are you sure you want to book these {selectedSlots.length} slot(s)?</p>
+//             <div className="flex justify-center gap-4 mt-5">
+//               <button
+//                 onClick={() => setShowConfirmPopup(false)}
+//                 className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
+//               >
+//                 Cancel
+//               </button>
+//               <button
+//                 onClick={handleConfirmBooking}
+//                 className="px-4 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//               >
+//                 Yes
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* ⚠️ Slot Limit Popup */}
+//       {showPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Limit Reached</h2>
+//             <p>You can only book up to 3 slots in one payment.</p>
+//             <button
+//               onClick={() => setShowPopup(false)}
+//               className="mt-5 px-6 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* ⚠️ Already Booked Popup */}
+//       {showBookedPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Slot Already Booked</h2>
+//             <p>This slot is not available. Please choose another one.</p>
+//             <button
+//               onClick={() => setShowBookedPopup(false)}
+//               className="mt-5 px-6 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Padel;
+
+
+// import React, { useState, useRef, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { createBooking } from "../../services/bookingService";
+
+// const Padel = () => {
+//   const navigate = useNavigate();
+
+//   const years = [2023, 2024, 2025];
+//   const months = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December"
+//   ];
+
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+//   const [selectedDate, setSelectedDate] = useState(null);
+//   const [selectedSlots, setSelectedSlots] = useState([]);
+//   const [bookedSlots, setBookedSlots] = useState({});
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [showBookedPopup, setShowBookedPopup] = useState(false);
+//   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+//   const slotsRef = useRef(null);
+
+//   // ✅ Fetch booked slots from backend
+//   useEffect(() => {
+//     const fetchBookings = async () => {
+//       try {
+//         const data = await bookingService.getAll();
+//         const grouped = {};
+
+//         data
+//           .filter((b) => b.court === "Padel") // only show padel bookings
+//           .forEach((b) => {
+//             const key = `${b.year}-${b.month}-${b.date}`;
+//             grouped[key] = grouped[key]
+//               ? [...grouped[key], ...b.slots]
+//               : [...b.slots];
+//           });
+
+//         setBookedSlots(grouped);
+//       } catch (error) {
+//         console.error("Error fetching padel bookings:", error);
+//       }
+//     };
+
+//     fetchBookings();
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedDate && slotsRef.current) {
+//       slotsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+//     }
+//   }, [selectedDate]);
+
+//   const handleSlotClick = (index) => {
+//     const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//     const bookedForDate = bookedSlots[key] || [];
+
+//     if (bookedForDate.includes(index)) {
+//       setShowBookedPopup(true);
+//       return;
+//     }
+
+//     if (selectedSlots.includes(index)) {
+//       setSelectedSlots(selectedSlots.filter((slot) => slot !== index));
+//     } else {
+//       if (selectedSlots.length >= 3) {
+//         setShowPopup(true);
+//         return;
+//       }
+//       setSelectedSlots([...selectedSlots, index]);
+//     }
+//   };
+
+//   // ✅ Send booking to backend
+//   const handleConfirmBooking = async () => {
+//     try {
+//       await bookingService.create({
+//         year: selectedYear,
+//         month: selectedMonth,
+//         date: selectedDate,
+//         slots: selectedSlots,
+//         court: "Padel",
+//       });
+
+//       setShowConfirmPopup(false);
+//       setSelectedSlots([]);
+//       alert("Padel booking confirmed ✅");
+
+//       // Re-fetch bookings to update UI
+//       const updated = await bookingService.getAll();
+//       const grouped = {};
+//       updated
+//         .filter((b) => b.court === "Padel")
+//         .forEach((b) => {
+//           const key = `${b.year}-${b.month}-${b.date}`;
+//           grouped[key] = grouped[key]
+//             ? [...grouped[key], ...b.slots]
+//             : [...b.slots];
+//         });
+//       setBookedSlots(grouped);
+//     } catch (error) {
+//       console.error("Error saving padel booking:", error);
+//       alert("Error booking slot ❌");
+//     }
+//   };
+
+//   const generateCalendar = (year, month) => {
+//     const firstDay = new Date(year, month, 1).getDay();
+//     const daysInMonth = new Date(year, month + 1, 0).getDate();
+//     const calendar = [];
+//     let week = [];
+
+//     for (let i = 0; i < firstDay; i++) week.push(null);
+//     for (let day = 1; day <= daysInMonth; day++) {
+//       week.push(day);
+//       if (week.length === 7) {
+//         calendar.push(week);
+//         week = [];
+//       }
+//     }
+//     if (week.length > 0) {
+//       while (week.length < 7) week.push(null);
+//       calendar.push(week);
+//     }
+//     return calendar;
+//   };
+
+//   const calendar = generateCalendar(selectedYear, selectedMonth);
+//   const timeSlots = Array.from({ length: 24 }, (_, i) => {
+//     const start = i % 12 === 0 ? 12 : i % 12;
+//     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
+//     const ampmStart = i < 12 ? "AM" : "PM";
+//     const ampmEnd = i + 1 < 12 ? "AM" : "PM";
+//     return `${start} ${ampmStart} - ${end} ${ampmEnd}`;
+//   });
+
+//   const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//   const bookedForDate = bookedSlots[key] || [];
+
+//   return (
+//     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
+//       {/* Sidebar */}
+//       <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
+//         <h2 className="text-2xl font-bold mb-4 text-center md:text-left">
+//           Select Year
+//         </h2>
+//         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
+//           {years.map((year) => (
+//             <button
+//               key={year}
+//               onClick={() => {
+//                 setSelectedYear(year);
+//                 setSelectedDate(null);
+//               }}
+//               className={`px-4 py-2 rounded-lg ${
+//                 selectedYear === year
+//                   ? "bg-gradient-to-r from-orange-600 to-red-600"
+//                   : "bg-gray-700"
+//               }`}
+//             >
+//               {year}
+//             </button>
+//           ))}
+//         </div>
+
+//         <h2 className="text-xl font-semibold mb-3 text-center md:text-left">
+//           Months
+//         </h2>
+//         <ul className="space-y-2 flex flex-wrap gap-2 justify-center md:block">
+//           {months.map((month, index) => (
+//             <li
+//               key={index}
+//               onClick={() => {
+//                 setSelectedMonth(index);
+//                 setSelectedDate(null);
+//               }}
+//               className={`cursor-pointer px-3 py-2 rounded-lg ${
+//                 selectedMonth === index
+//                   ? "bg-orange-600 text-white"
+//                   : "hover:bg-gray-700"
+//               }`}
+//             >
+//               {month}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {/* Main */}
+//       <div className="md:w-3/4 w-full p-4 md:p-8">
+//         <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+//           Padel Court Booking
+//         </h1>
+
+//         {/* Calendar */}
+//         <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
+//           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+//             <div
+//               key={day}
+//               className="font-semibold text-orange-400 text-xs sm:text-sm"
+//             >
+//               {day}
+//             </div>
+//           ))}
+//           {calendar.map((week, i) =>
+//             week.map((day, j) => (
+//               <div
+//                 key={`${i}-${j}`}
+//                 onClick={() => day && setSelectedDate(day)}
+//                 className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm
+//                   ${day ? "bg-gray-800 hover:bg-orange-600 cursor-pointer" : ""}
+//                   ${selectedDate === day ? "bg-black" : ""}`}
+//               >
+//                 {day || ""}
+//               </div>
+//             ))
+//           )}
+//         </div>
+
+//         {/* Slots */}
+//         {selectedDate && (
+//           <div
+//             ref={slotsRef}
+//             className="w-full mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4"
+//           >
+//             <div className="bg-gray-900 p-4 rounded-lg">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">
+//                 Available Slots - {months[selectedMonth]} {selectedDate},{" "}
+//                 {selectedYear}
+//               </h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {timeSlots.map((slot, index) => (
+//                   <li
+//                     key={index}
+//                     onClick={() => handleSlotClick(index)}
+//                     className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-pointer 
+//                     ${
+//                       selectedSlots.includes(index)
+//                         ? "bg-orange-600 text-white font-bold"
+//                         : "hover:bg-orange-600"
+//                     } 
+//                     ${
+//                       bookedForDate.includes(index)
+//                         ? "bg-gray-700 cursor-not-allowed"
+//                         : ""
+//                     }`}
+//                   >
+//                     {slot}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+//           </div>
+//         )}
+
+//         {selectedSlots.length > 0 && (
+//           <div className="mt-4 text-center sm:text-end">
+//             <button
+//               onClick={() => setShowConfirmPopup(true)}
+//               className="px-6 py-2 bg-orange-600 hover:bg-orange-700 rounded-lg font-semibold"
+//             >
+//               Book Now
+//             </button>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Confirm Popup */}
+//       {showConfirmPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 p-6 rounded-lg text-center">
+//             <h2 className="text-lg font-bold text-orange-400 mb-4">
+//               Confirm Booking
+//             </h2>
+//             <p>Book these {selectedSlots.length} slots?</p>
+//             <div className="flex justify-center gap-4 mt-5">
+//               <button
+//                 onClick={() => setShowConfirmPopup(false)}
+//                 className="px-4 py-2 bg-gray-600 rounded"
+//               >
+//                 Cancel
+//               </button>
+//               <button
+//                 onClick={handleConfirmBooking}
+//                 className="px-4 py-2 bg-orange-600 rounded"
+//               >
+//                 Yes
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Padel;
+
+
+
+
+
+// import React, { useState, useRef, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { bookingService } from "../../services/bookingService";
+
+// const Padel = () => {
+//   const navigate = useNavigate();
+
+//   const years = [2023, 2024, 2025];
+//   const months = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December"
+//   ];
+
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+//   const [selectedDate, setSelectedDate] = useState(null);
+//   const [selectedSlots, setSelectedSlots] = useState([]);
+//   const [bookedSlots, setBookedSlots] = useState({});
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [showBookedPopup, setShowBookedPopup] = useState(false);
+//   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+//   const slotsRef = useRef(null);
+
+//   // ✅ Fetch booked slots from backend
+//   useEffect(() => {
+//     const fetchBookings = async () => {
+//       try {
+//         const data = await bookingService.getAll();
+//         const grouped = {};
+
+//         data
+//           .filter((b) => b.court === "Padel")
+//           .forEach((b) => {
+//             const key = `${b.year}-${b.month}-${b.date}`;
+//             grouped[key] = grouped[key]
+//               ? [...grouped[key], ...b.slots]
+//               : [...b.slots];
+//           });
+
+//         setBookedSlots(grouped);
+//       } catch (error) {
+//         console.error("Error fetching padel bookings:", error);
+//       }
+//     };
+
+//     fetchBookings();
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedDate && slotsRef.current) {
+//       slotsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+//     }
+//   }, [selectedDate]);
+
+//   const handleSlotClick = (index) => {
+//     const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//     const bookedForDate = bookedSlots[key] || [];
+
+//     if (bookedForDate.includes(index)) {
+//       setShowBookedPopup(true);
+//       return;
+//     }
+
+//     if (selectedSlots.includes(index)) {
+//       setSelectedSlots(selectedSlots.filter((slot) => slot !== index));
+//     } else {
+//       if (selectedSlots.length >= 3) {
+//         setShowPopup(true);
+//         return;
+//       }
+//       setSelectedSlots([...selectedSlots, index]);
+//     }
+//   };
+
+//   // ✅ Confirm booking and save to backend
+//   const handleConfirmBooking = async () => {
+//     try {
+//       await bookingService.create({
+//         year: selectedYear,
+//         month: selectedMonth,
+//         date: selectedDate,
+//         slots: selectedSlots,
+//         court: "Padel",
+//       });
+
+//       alert("🎾 Padel booking confirmed successfully!");
+//       setShowConfirmPopup(false);
+//       setSelectedSlots([]);
+
+//       // Re-fetch updated bookings
+//       const updated = await bookingService.getAll();
+//       const grouped = {};
+//       updated
+//         .filter((b) => b.court === "Padel")
+//         .forEach((b) => {
+//           const key = `${b.year}-${b.month}-${b.date}`;
+//           grouped[key] = grouped[key]
+//             ? [...grouped[key], ...b.slots]
+//             : [...b.slots];
+//         });
+//       setBookedSlots(grouped);
+//     } catch (error) {
+//       console.error("Error saving padel booking:", error);
+//       alert("❌ Error booking slot. Please try again.");
+//     }
+//   };
+
+//   // Generate calendar
+//   const generateCalendar = (year, month) => {
+//     const firstDay = new Date(year, month, 1).getDay();
+//     const daysInMonth = new Date(year, month + 1, 0).getDate();
+//     const calendar = [];
+//     let week = [];
+
+//     for (let i = 0; i < firstDay; i++) week.push(null);
+//     for (let day = 1; day <= daysInMonth; day++) {
+//       week.push(day);
+//       if (week.length === 7) {
+//         calendar.push(week);
+//         week = [];
+//       }
+//     }
+//     if (week.length > 0) {
+//       while (week.length < 7) week.push(null);
+//       calendar.push(week);
+//     }
+//     return calendar;
+//   };
+
+//   const calendar = generateCalendar(selectedYear, selectedMonth);
+//   const timeSlots = Array.from({ length: 24 }, (_, i) => {
+//     const start = i % 12 === 0 ? 12 : i % 12;
+//     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
+//     const ampmStart = i < 12 ? "AM" : "PM";
+//     const ampmEnd = i + 1 < 12 ? "AM" : "PM";
+//     return `${start} ${ampmStart} - ${end} ${ampmEnd}`;
+//   });
+
+//   const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//   const bookedForDate = bookedSlots[key] || [];
+
+//   return (
+//     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
+//       {/* Sidebar */}
+//       <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
+//         <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Select Year</h2>
+//         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
+//           {years.map((year) => (
+//             <button
+//               key={year}
+//               onClick={() => {
+//                 setSelectedYear(year);
+//                 setSelectedDate(null);
+//               }}
+//               className={`px-4 py-2 rounded-lg ${
+//                 selectedYear === year
+//                   ? "bg-gradient-to-r from-orange-600 to-red-600"
+//                   : "bg-gray-700"
+//               }`}
+//             >
+//               {year}
+//             </button>
+//           ))}
+//         </div>
+
+//         <h2 className="text-xl font-semibold mb-3 text-center md:text-left">Months</h2>
+//         <ul className="space-y-2 flex flex-wrap gap-2 justify-center md:block">
+//           {months.map((month, index) => (
+//             <li
+//               key={index}
+//               onClick={() => {
+//                 setSelectedMonth(index);
+//                 setSelectedDate(null);
+//               }}
+//               className={`cursor-pointer px-3 py-2 rounded-lg ${
+//                 selectedMonth === index
+//                   ? "bg-orange-600 text-white"
+//                   : "hover:bg-gray-700"
+//               }`}
+//             >
+//               {month}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {/* Main */}
+//       <div className="md:w-3/4 w-full p-4 md:p-8">
+//         <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+//           Padel Court Booking
+//         </h1>
+
+//         {/* Calendar */}
+//         <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
+//           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+//             <div key={day} className="font-semibold text-orange-400 text-xs sm:text-sm">{day}</div>
+//           ))}
+//           {calendar.map((week, i) =>
+//             week.map((day, j) => (
+//               <div
+//                 key={`${i}-${j}`}
+//                 onClick={() => day && setSelectedDate(day)}
+//                 className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm
+//                   ${day ? "bg-gray-800 hover:bg-orange-600 cursor-pointer" : ""} 
+//                   ${selectedDate === day ? "bg-black" : ""}`}
+//               >
+//                 {day || ""}
+//               </div>
+//             ))
+//           )}
+//         </div>
+
+//         {/* Slots Section */}
+//         {selectedDate && (
+//           <div ref={slotsRef} className="w-full mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+//             {/* Time Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">
+//                 Time Slots - {months[selectedMonth]} {selectedDate}, {selectedYear}
+//               </h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {timeSlots.map((slot, index) => (
+//                   <li key={index} className="h-8 sm:h-10 px-2 py-1 rounded bg-gray-800">
+//                     {slot}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+
+//             {/* Available Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Available Slots</h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {Array(24).fill(null).map((_, index) => (
+//                   <li
+//                     key={index}
+//                     onClick={() => handleSlotClick(index)}
+//                     className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-pointer 
+//                     ${selectedSlots.includes(index) ? "bg-orange-600 text-white font-bold" : "hover:bg-orange-600"} 
+//                     ${bookedForDate.includes(index) ? "bg-gray-700 cursor-not-allowed" : ""}`}
+//                   >
+//                     {selectedSlots.includes(index) || bookedForDate.includes(index)
+//                       ? <span className="text-sm sm:text-2xl">🎾</span>
+//                       : ""}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+
+//             {/* Booked Slots */}
+//             <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
+//               <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Booked Slots</h3>
+//               <ul className="space-y-1 text-xs sm:text-sm">
+//                 {Array(24).fill(null).map((_, index) => (
+//                   <li
+//                     key={index}
+//                     className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-not-allowed 
+//                     ${bookedForDate.includes(index) ? "bg-orange-600 text-white font-bold" : ""}`}
+//                   >
+//                     {bookedForDate.includes(index) ? <span className="text-sm sm:text-2xl">🎾</span> : ""}
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+//           </div>
+//         )}
+
+//         {/* Book Now Button */}
+//         {selectedSlots.length > 0 && (
+//           <div className="mt-4 text-center sm:text-end">
+//             <button
+//               onClick={() => setShowConfirmPopup(true)}
+//               className="px-6 py-2 sm:px-6 sm:py-3 bg-orange-600 hover:bg-orange-700 rounded-lg font-semibold transition"
+//             >
+//               Book Now
+//             </button>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* ✅ Confirmation Popup */}
+//       {showConfirmPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Confirm Booking</h2>
+//             <p>Are you sure you want to book these {selectedSlots.length} slot(s)?</p>
+//             <div className="flex justify-center gap-4 mt-5">
+//               <button
+//                 onClick={() => setShowConfirmPopup(false)}
+//                 className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
+//               >
+//                 Cancel
+//               </button>
+//               <button
+//                 onClick={handleConfirmBooking}
+//                 className="px-4 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//               >
+//                 Yes
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* ⚠️ Slot Limit Popup */}
+//       {showPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Limit Reached</h2>
+//             <p>You can only book up to 3 slots in one payment.</p>
+//             <button
+//               onClick={() => setShowPopup(false)}
+//               className="mt-5 px-6 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* ⚠️ Already Booked Popup */}
+//       {showBookedPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+//           <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+//             <h2 className="text-lg font-bold mb-4 text-orange-400">Slot Already Booked</h2>
+//             <p>This slot is not available. Please choose another one.</p>
+//             <button
+//               onClick={() => setShowBookedPopup(false)}
+//               className="mt-5 px-6 py-2 bg-orange-600 rounded hover:bg-orange-700"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Padel;
+
+
+// import React, { useState, useRef, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import bookingService from "../../services/bookingService";
+
+// const Padel = () => {
+//   const navigate = useNavigate();
+
+//   const years = [2023, 2024, 2025];
+//   const months = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December"
+//   ];
+
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+//   const [selectedDate, setSelectedDate] = useState(null);
+//   const [selectedSlots, setSelectedSlots] = useState([]);
+//   const [bookedSlots, setBookedSlots] = useState({});
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [showBookedPopup, setShowBookedPopup] = useState(false);
+//   const [isLoading, setIsLoading] = useState(true);
+
+//   const slotsRef = useRef(null);
+
+//   // ✅ Fetch booked slots for Padel
+//   useEffect(() => {
+//     const fetchBookings = async () => {
+//       setIsLoading(true);
+//       try {
+//         const data = await bookingService.getAll();
+//         const grouped = {};
+
+//         data
+//           .filter((b) => b.court === "Padel")
+//           .forEach((b) => {
+//             const key = `${b.year}-${b.month}-${b.date}`;
+//             grouped[key] = grouped[key]
+//               ? [...grouped[key], ...b.slots]
+//               : [...b.slots];
+//           });
+
+//         setBookedSlots(grouped);
+//       } catch (error) {
+//         console.error("Error fetching Padel bookings:", error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchBookings();
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedDate && slotsRef.current) {
+//       slotsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+//     }
+//   }, [selectedDate]);
+
+//   const handleSlotClick = (index) => {
+//     const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//     const bookedForDate = bookedSlots[key] || [];
+
+//     if (bookedForDate.includes(index)) {
+//       setShowBookedPopup(true);
+//       return;
+//     }
+
+//     if (selectedSlots.includes(index)) {
+//       setSelectedSlots(selectedSlots.filter((slot) => slot !== index));
+//     } else {
+//       if (selectedSlots.length >= 3) {
+//         setShowPopup(true);
+//         return;
+//       }
+//       setSelectedSlots([...selectedSlots, index]);
+//     }
+//   };
+
+//   const handleBookNow = () => {
+//     if (selectedSlots.length === 0) {
+//       alert("Please select at least one slot");
+//       return;
+//     }
+
+//     navigate("/payment", {
+//       state: {
+//         year: selectedYear,
+//         month: selectedMonth,
+//         date: selectedDate,
+//         slots: selectedSlots,
+//         court: "Padel",
+//       },
+//     });
+//   };
+
+//   const generateCalendar = (year, month) => {
+//     const firstDay = new Date(year, month, 1).getDay();
+//     const daysInMonth = new Date(year, month + 1, 0).getDate();
+//     const calendar = [];
+//     let week = [];
+
+//     for (let i = 0; i < firstDay; i++) week.push(null);
+//     for (let day = 1; day <= daysInMonth; day++) {
+//       week.push(day);
+//       if (week.length === 7) {
+//         calendar.push(week);
+//         week = [];
+//       }
+//     }
+//     if (week.length > 0) {
+//       while (week.length < 7) week.push(null);
+//       calendar.push(week);
+//     }
+//     return calendar;
+//   };
+
+//   const calendar = generateCalendar(selectedYear, selectedMonth);
+//   const timeSlots = Array.from({ length: 24 }, (_, i) => {
+//     const start = i % 12 === 0 ? 12 : i % 12;
+//     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
+//     const ampmStart = i < 12 ? "AM" : "PM";
+//     const ampmEnd = i + 1 < 12 ? "AM" : "PM";
+//     return `${start} ${ampmStart} - ${end} ${ampmEnd}`;
+//   });
+
+//   const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
+//   const bookedForDate = bookedSlots[key] || [];
+
+//   return (
+//     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
+//       {/* Sidebar */}
+//       <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
+//         <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Select Year</h2>
+//         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
+//           {years.map((year) => (
+//             <button
+//               key={year}
+//               onClick={() => {
+//                 setSelectedYear(year);
+//                 setSelectedDate(null);
+//                 setSelectedSlots([]);
+//               }}
+//               className={`px-4 py-2 rounded-lg transition ${
+//                 selectedYear === year
+//                   ? "bg-gradient-to-r from-blue-600 to-indigo-600"
+//                   : "bg-gray-700 hover:bg-gray-600"
+//               }`}
+//             >
+//               {year}
+//             </button>
+//           ))}
+//         </div>
+
+//         <h2 className="text-xl font-semibold mb-3 text-center md:text-left">Months</h2>
+//         <ul className="space-y-2 flex flex-wrap gap-2 justify-center md:block">
+//           {months.map((month, index) => (
+//             <li
+//               key={index}
+//               onClick={() => {
+//                 setSelectedMonth(index);
+//                 setSelectedDate(null);
+//                 setSelectedSlots([]);
+//               }}
+//               className={`cursor-pointer px-3 py-2 rounded-lg transition ${
+//                 selectedMonth === index
+//                   ? "bg-blue-600 text-white"
+//                   : "hover:bg-gray-700"
+//               }`}
+//             >
+//               {month}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       {/* Main Content */}
+//       <div className="md:w-3/4 w-full p-4 md:p-8">
+//         <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+//           Padel Court Booking
+//         </h1>
+//         <p className="text-sm sm:text-base text-gray-400 text-center mb-6">
+//           Select up to 3 slots for Padel booking.
+//         </p>
+
+//         {isLoading && <div className="text-center text-blue-400 mb-4">Loading bookings...</div>}
+
+//         {/* Calendar */}
+//         <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center mb-6">
+//           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+//             <div key={day} className="font-semibold text-blue-400 text-xs sm:text-sm">{day}</div>
+//           ))}
+//           {calendar.map((week, i) =>
+//             week.map((day, j) => (
+//               <div
+//                 key={`${i}-${j}`}
+//                 onClick={() => {
+//                   if (day) {
+//                     setSelectedDate(day);
+//                     setSelectedSlots([]);
+//                   }
+//                 }}
+//                 className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm transition
+//                   ${day ? "bg-gray-800 hover:bg-blue-600 cursor-pointer" : ""}
+//                   ${selectedDate === day ? "bg-blue-600 font-bold" : ""}`}
+//               >
+//                 {day || ""}
+//               </div>
+//             ))
+//           )}
+//         </div>
+
+//         {/* Slots */}
+//         {selectedDate && (
+//           <div ref={slotsRef} className="w-full mt-6">
+//             <h2 className="text-xl font-bold text-center mb-4 text-blue-400">
+//               {months[selectedMonth]} {selectedDate}, {selectedYear}
+//             </h2>
+//             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+//               {Array(24)
+//                 .fill(null)
+//                 .map((_, index) => (
+//                   <div
+//                     key={index}
+//                     onClick={() => handleSlotClick(index)}
+//                     className={`h-10 flex items-center justify-center rounded transition cursor-pointer
+//                     ${
+//                       selectedSlots.includes(index)
+//                         ? "bg-blue-600 text-white font-bold scale-105"
+//                         : bookedForDate.includes(index)
+//                         ? "bg-gray-700 cursor-not-allowed opacity-50"
+//                         : "bg-gray-800 hover:bg-blue-600 hover:scale-105"
+//                     }`}
+//                   >
+//                     {selectedSlots.includes(index)
+//                       ? "🎾"
+//                       : bookedForDate.includes(index)
+//                       ? "❌"
+//                       : "Click to book"}
+//                   </div>
+//                 ))}
+//             </div>
+//           </div>
+//         )}
+
+//         {selectedSlots.length > 0 && (
+//           <div className="mt-6 flex justify-between items-center">
+//             <p className="text-blue-400 font-semibold">
+//               {selectedSlots.length} slot{selectedSlots.length > 1 ? "s" : ""} selected
+//             </p>
+//             <button
+//               onClick={handleBookNow}
+//               className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg font-semibold transition transform hover:scale-105"
+//             >
+//               Book Now
+//             </button>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Popups */}
+//       {showPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+//           <div className="bg-gray-800 p-6 rounded-lg text-center">
+//             <h2 className="text-lg font-bold text-blue-400 mb-4">Limit Reached</h2>
+//             <p>You can only book up to 3 slots.</p>
+//             <button
+//               onClick={() => setShowPopup(false)}
+//               className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {showBookedPopup && (
+//         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+//           <div className="bg-gray-800 p-6 rounded-lg text-center">
+//             <h2 className="text-lg font-bold text-blue-400 mb-4">Already Booked</h2>
+//             <p>This slot is not available.</p>
+//             <button
+//               onClick={() => setShowBookedPopup(false)}
+//               className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+//             >
+//               OK
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Padel;
+
+
+
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import bookingService from "../../services/bookingService";
 
 const Padel = () => {
+  const navigate = useNavigate();
+
   const years = [2023, 2024, 2025];
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -10,21 +1253,43 @@ const Padel = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedDate, setSelectedDate] = useState(null);
-
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [bookedSlots, setBookedSlots] = useState({});
   const [showPopup, setShowPopup] = useState(false);
   const [showBookedPopup, setShowBookedPopup] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const slotsRef = useRef(null);
 
-  // Load booked slots from localStorage
+  // ✅ Fetch booked slots for Padel
   useEffect(() => {
-    const savedSlots = JSON.parse(localStorage.getItem("padelBookedSlots")) || {};
-    setBookedSlots(savedSlots);
+    const fetchBookings = async () => {
+      setIsLoading(true);
+      try {
+        const data = await bookingService.getAll();
+        const grouped = {};
+
+        data
+          .filter((b) => b.court === "Padel")
+          .forEach((b) => {
+            const key = `${b.year}-${b.month}-${b.date}`;
+            grouped[key] = grouped[key]
+              ? [...grouped[key], ...b.slots]
+              : [...b.slots];
+          });
+
+        setBookedSlots(grouped);
+      } catch (error) {
+        console.error("Error fetching padel bookings:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookings();
   }, []);
 
-  // Scroll to slots section when date is selected
   useEffect(() => {
     if (selectedDate && slotsRef.current) {
       slotsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -43,7 +1308,7 @@ const Padel = () => {
     if (selectedSlots.includes(index)) {
       setSelectedSlots(selectedSlots.filter((slot) => slot !== index));
     } else {
-      if (selectedSlots.length >= 4) {
+      if (selectedSlots.length >= 3) {
         setShowPopup(true);
         return;
       }
@@ -51,17 +1316,23 @@ const Padel = () => {
     }
   };
 
-  const handleBooking = () => {
-    const key = `${selectedYear}-${selectedMonth}-${selectedDate}`;
-    const bookedForDate = bookedSlots[key] || [];
-    const updatedBooked = { 
-      ...bookedSlots, 
-      [key]: [...bookedForDate, ...selectedSlots] 
+  // ✅ Save booking to localStorage and navigate
+  const handleBookNow = () => {
+    if (selectedSlots.length === 0) {
+      alert("Please select at least one slot");
+      return;
+    }
+
+    const bookingData = {
+      year: selectedYear,
+      month: selectedMonth,
+      date: selectedDate,
+      slots: selectedSlots,
+      court: "Padel",
     };
-    setBookedSlots(updatedBooked);
-    localStorage.setItem("padelBookedSlots", JSON.stringify(updatedBooked));
-    setSelectedSlots([]);
-    alert(`You booked ${selectedSlots.length} slot(s)`);
+
+    localStorage.setItem("pendingBooking", JSON.stringify(bookingData));
+    navigate("/payment-method");
   };
 
   const generateCalendar = (year, month) => {
@@ -86,7 +1357,6 @@ const Padel = () => {
   };
 
   const calendar = generateCalendar(selectedYear, selectedMonth);
-
   const timeSlots = Array.from({ length: 24 }, (_, i) => {
     const start = i % 12 === 0 ? 12 : i % 12;
     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
@@ -101,14 +1371,22 @@ const Padel = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
       {/* Sidebar */}
-      <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r md:border-gray-700">
-        <h2 className="text-2xl font-bold mb-4 mt-4 md:mt-18 text-center md:text-left">Select Year</h2>
+      <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
+        <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Select Year</h2>
         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
           {years.map((year) => (
             <button
               key={year}
-              onClick={() => { setSelectedYear(year); setSelectedDate(null); }}
-              className={`px-4 py-2 rounded-lg ${selectedYear === year ? "bg-gradient-to-r from-orange-600 to-red-600" : "bg-gray-700"}`}
+              onClick={() => {
+                setSelectedYear(year);
+                setSelectedDate(null);
+                setSelectedSlots([]);
+              }}
+              className={`px-4 py-2 rounded-lg transition ${
+                selectedYear === year
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600"
+                  : "bg-gray-700 hover:bg-gray-600"
+              }`}
             >
               {year}
             </button>
@@ -120,8 +1398,16 @@ const Padel = () => {
           {months.map((month, index) => (
             <li
               key={index}
-              onClick={() => { setSelectedMonth(index); setSelectedDate(null); }}
-              className={`cursor-pointer px-3 py-2 rounded-lg ${selectedMonth === index ? "bg-orange-600 text-white" : "hover:bg-gray-700"}`}
+              onClick={() => {
+                setSelectedMonth(index);
+                setSelectedDate(null);
+                setSelectedSlots([]);
+              }}
+              className={`cursor-pointer px-3 py-2 rounded-lg transition ${
+                selectedMonth === index
+                  ? "bg-blue-600 text-white"
+                  : "hover:bg-gray-700"
+              }`}
             >
               {month}
             </li>
@@ -131,32 +1417,37 @@ const Padel = () => {
 
       {/* Main Content */}
       <div className="md:w-3/4 w-full p-4 md:p-8">
-        <h1 className="mt-4 md:mt-15 text-3xl sm:text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-6 text-center">
-          Padel Gallery
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Padel Court Booking
         </h1>
-
-        <p className="text-sm sm:text-lg text-white max-w-2xl text-center mx-auto mb-6 sm:mb-10">
-          Padel is a rapidly growing racket sport played on an enclosed court,
-          combining elements of tennis and squash. Explore intense matches, top players, and tournament highlights.
+        <p className="text-sm sm:text-base text-gray-400 text-center mb-6">
+          Book your favorite time slots for padel. Select up to 3 slots at once.
         </p>
 
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
-          {months[selectedMonth]} {selectedYear}
-        </h2>
+        {isLoading && (
+          <div className="text-center text-blue-400 mb-4">
+            Loading bookings...
+          </div>
+        )}
 
         {/* Calendar */}
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center overflow-auto">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center mb-6">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="font-semibold text-orange-400 text-xs sm:text-sm">{day}</div>
+            <div key={day} className="font-semibold text-blue-400 text-xs sm:text-sm">{day}</div>
           ))}
           {calendar.map((week, i) =>
             week.map((day, j) => (
               <div
                 key={`${i}-${j}`}
-                onClick={() => day && setSelectedDate(day)}
-                className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm
-                  ${day ? "bg-gray-800 hover:bg-orange-600 cursor-pointer" : ""} 
-                  ${selectedDate === day ? "bg-black" : ""}`}
+                onClick={() => {
+                  if (day) {
+                    setSelectedDate(day);
+                    setSelectedSlots([]);
+                  }
+                }}
+                className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm transition
+                  ${day ? "bg-gray-800 hover:bg-blue-600 cursor-pointer" : ""}
+                  ${selectedDate === day ? "bg-blue-600 font-bold" : ""}`}
               >
                 {day || ""}
               </div>
@@ -166,60 +1457,91 @@ const Padel = () => {
 
         {/* Slots Section */}
         {selectedDate && (
-          <div ref={slotsRef} className="w-full mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {/* Time Slots */}
-            <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
-              <h3 className="text-lg font-bold mb-2 text-center sm:text-left">
-                Time Slots - {months[selectedMonth]} {selectedDate}, {selectedYear}
-              </h3>
-              <ul className="space-y-1 text-xs sm:text-sm">
-                {timeSlots.map((slot, index) => (
-                  <li key={index} className="h-8 sm:h-10 px-2 sm:px-3 py-1 rounded bg-gray-800 hover:bg-orange-600 cursor-pointer">
-                    {slot}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div ref={slotsRef} className="w-full mt-6">
+            <h2 className="text-xl font-bold text-center mb-4 text-blue-400">
+              {months[selectedMonth]} {selectedDate}, {selectedYear}
+            </h2>
 
-            {/* Available Slots */}
-            <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
-              <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Available Slots</h3>
-              <ul className="space-y-1 text-xs sm:text-sm">
-                {Array(24).fill(null).map((_, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSlotClick(index)}
-                    className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-pointer ${selectedSlots.includes(index) ? "bg-orange-600 text-white font-bold" : "hover:bg-orange-600"} ${bookedForDate.includes(index) ? "bg-gray-700 cursor-not-allowed" : ""}`}
-                  >
-                    {selectedSlots.includes(index) || bookedForDate.includes(index) ? <span className="text-sm sm:text-2xl">🎾</span> : ""}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Time Slots */}
+              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
+                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
+                  Time Slots
+                </h3>
+                <ul className="space-y-1 text-xs sm:text-sm">
+                  {timeSlots.map((slot, index) => (
+                    <li key={index} className="h-10 px-3 py-2 rounded bg-gray-800 flex items-center">
+                      {slot}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {/* Booked Slots */}
-            <div className="bg-gray-900 p-4 rounded-lg overflow-auto h-full">
-              <h3 className="text-lg font-bold mb-2 text-center sm:text-left">Booked Slots</h3>
-              <ul className="space-y-1 text-xs sm:text-sm">
-                {Array(24).fill(null).map((_, index) => (
-                  <li
-                    key={index}
-                    className={`h-8 sm:h-10 flex items-center justify-center rounded bg-gray-800 cursor-not-allowed ${bookedForDate.includes(index) ? "bg-orange-600 text-white font-bold" : ""}`}
-                  >
-                    {bookedForDate.includes(index) ? <span className="text-sm sm:text-2xl">🎾</span> : ""}
-                  </li>
-                ))}
-              </ul>
+              {/* Available Slots */}
+              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
+                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
+                  Available Slots
+                </h3>
+                <ul className="space-y-1 text-xs sm:text-sm">
+                  {Array(24).fill(null).map((_, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSlotClick(index)}
+                      className={`h-10 flex items-center justify-center rounded transition cursor-pointer
+                      ${selectedSlots.includes(index) 
+                        ? "bg-blue-600 text-white font-bold scale-105" 
+                        : bookedForDate.includes(index)
+                        ? "bg-gray-700 cursor-not-allowed opacity-50"
+                        : "bg-gray-800 hover:bg-blue-600 hover:scale-105"
+                      }`}
+                    >
+                      {selectedSlots.includes(index) ? (
+                        <span className="text-2xl">🎾</span>
+                      ) : bookedForDate.includes(index) ? (
+                        <span className="text-2xl opacity-50">🎾</span>
+                      ) : (
+                        <span className="text-gray-500">Click to book</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Booked Slots */}
+              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
+                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
+                  Confirmed Bookings
+                </h3>
+                <ul className="space-y-1 text-xs sm:text-sm">
+                  {Array(24).fill(null).map((_, index) => (
+                    <li
+                      key={index}
+                      className={`h-10 flex items-center justify-center rounded cursor-not-allowed
+                      ${bookedForDate.includes(index) 
+                        ? "bg-blue-900 text-white font-bold" 
+                        : "bg-gray-800"
+                      }`}
+                    >
+                      {bookedForDate.includes(index) && (
+                        <span className="text-2xl">🎾</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Book Now Button */}
+        {/* ✅ Book Now Button */}
         {selectedSlots.length > 0 && (
-          <div className="mt-4 sm:mt-6 text-center sm:text-end">
+          <div className="mt-6 flex justify-between items-center">
+            <p className="text-blue-400 font-semibold">
+              {selectedSlots.length} slot{selectedSlots.length > 1 ? 's' : ''} selected
+            </p>
             <button
-              onClick={handleBooking}
-              className="px-6 py-2 sm:px-6 sm:py-3 bg-orange-600 hover:bg-orange-700 rounded-lg font-semibold transition"
+              onClick={() => setShowConfirmPopup(true)}
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg font-semibold transition transform hover:scale-105"
             >
               Book Now
             </button>
@@ -229,13 +1551,13 @@ const Padel = () => {
 
       {/* Popups */}
       {showPopup && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[300px]">
-            <h2 className="text-lg font-bold text-red-500 mb-4">⚠️ Limit Reached</h2>
-            <p>You can't book more than 4 slots with 1 payment.</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-blue-400">Limit Reached</h2>
+            <p>You can only book up to 3 slots.</p>
             <button
               onClick={() => setShowPopup(false)}
-              className="mt-4 px-4 py-2 bg-orange-600 rounded hover:bg-orange-700"
+              className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
             >
               OK
             </button>
@@ -244,16 +1566,43 @@ const Padel = () => {
       )}
 
       {showBookedPopup && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[300px]">
-            <h2 className="text-lg font-bold text-red-500 mb-4">⚠️ Already Booked</h2>
-            <p>This slot is already booked.</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-blue-400">Slot Already Booked</h2>
+            <p>This slot is not available. Please choose another one.</p>
             <button
               onClick={() => setShowBookedPopup(false)}
-              className="mt-4 px-4 py-2 bg-orange-600 rounded hover:bg-orange-700"
+              className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
             >
               OK
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ✅ Confirmation Popup */}
+      {showConfirmPopup && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
+          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-blue-400">Confirm Booking</h2>
+            <p>Are you sure you want to book these slots?</p>
+            <div className="flex justify-center gap-4 mt-5">
+              <button
+                onClick={() => {
+                  setShowConfirmPopup(false);
+                  handleBookNow();
+                }}
+                className="px-5 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => setShowConfirmPopup(false)}
+                className="px-5 py-2 bg-gray-600 rounded hover:bg-gray-700 transition"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

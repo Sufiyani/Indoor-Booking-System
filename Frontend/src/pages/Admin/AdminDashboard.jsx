@@ -197,7 +197,7 @@ const AdminDashboard = () => {
               Check your court reservation schedule
             </p>
             <button
-              onClick={() => navigate("/admin/bookings")}
+              onClick={() => navigate("/admin/gallery")}
               className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-2 rounded-xl text-white font-semibold hover:opacity-90 transition duration-300"
             >
               Go
