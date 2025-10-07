@@ -13,7 +13,7 @@ const GalleryCards = () => {
       title: "Cricket",
       image: cricketImg,
       description: "Experience cricket like never before on our premium grounds",
-      path: "/admin/view-cricket-booking-page",
+      path: "/admin/view-booking-page",
     },
     {
       title: "Futsal",

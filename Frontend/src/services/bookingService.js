@@ -24,12 +24,19 @@ export const deleteBooking = async (court, bookingId) => {
   return response.data;
 };
 
+// ✅ Update a booking (admin) - NEW
+export const updateBooking = async (court, bookingId, updateData) => {
+  const response = await api.put(`/api/bookings/${court}/${bookingId}`, updateData);
+  return response.data;
+};
+
 // ✅ Export default object for backward compatibility
 const bookingService = {
   getAll: getAllBookings,
   create: createBooking,
   getBookedSlots,
   delete: deleteBooking,
+  update: updateBooking,
 };
 
 export default bookingService;

@@ -4,7 +4,6 @@ import PadelBooking from '../models/PadelBooking.js';
 import { TryCatch } from '../middlewares/error.js';
 import { ErrorHandler } from '../lib/utility.js';
 
-// Helper function to select correct model
 const getModelByCourt = (court) => {
   switch (court) {
     case 'Cricket':
@@ -18,7 +17,7 @@ const getModelByCourt = (court) => {
   }
 };
 
-// ✅ Get booked slots for a court
+
 export const getBookedSlots = TryCatch(async (req, res, next) => {
   const { court } = req.params;
 
@@ -37,9 +36,9 @@ export const getBookedSlots = TryCatch(async (req, res, next) => {
   res.status(200).json({ success: true, bookedSlots });
 });
 
-// ✅ Create new booking
+
 export const createBooking = TryCatch(async (req, res, next) => {
-  const { court, year, month, date, slots, name, email, paymentMethod } = req.body;
+  const { court, year, month, date, slots, name, email, paymentMethod, paymentStatus } = req.body;
 
   if (!court || !year || !month || !date || !slots || !name || !email || !paymentMethod) {
     return next(new ErrorHandler('All fields are required', 400));
@@ -73,6 +72,7 @@ export const createBooking = TryCatch(async (req, res, next) => {
     name,
     email,
     paymentMethod,
+    paymentStatus: paymentStatus || 'Unpaid',
   });
 
   res.status(201).json({
@@ -97,7 +97,56 @@ export const getAllBookings = TryCatch(async (req, res) => {
   res.status(200).json({ success: true, bookings: all });
 });
 
-// ✅ Delete booking (admin)
+
+export const updateBooking = TryCatch(async (req, res, next) => {
+  const { court, id } = req.params;
+  const { name, email, paymentMethod, paymentStatus, slots, year, month, date } = req.body;
+
+  const Model = getModelByCourt(court);
+  if (!Model) return next(new ErrorHandler('Invalid court type', 400));
+
+  const booking = await Model.findById(id);
+  if (!booking) return next(new ErrorHandler('Booking not found', 404));
+
+  if (slots && Array.isArray(slots)) {
+    const existingBookings = await Model.find({ 
+      year: year || booking.year, 
+      month: month || booking.month, 
+      date: date || booking.date,
+      _id: { $ne: id } 
+    });
+
+    const alreadyBookedSlots = [];
+    existingBookings.forEach((b) => {
+      b.slots.forEach((slot) => {
+        if (slots.includes(slot)) alreadyBookedSlots.push(slot);
+      });
+    });
+
+    if (alreadyBookedSlots.length > 0)
+      return next(new ErrorHandler(`Slots ${alreadyBookedSlots.join(', ')} are already booked`, 400));
+  }
+
+  
+  if (name) booking.name = name;
+  if (email) booking.email = email;
+  if (paymentMethod) booking.paymentMethod = paymentMethod;
+  if (paymentStatus) booking.paymentStatus = paymentStatus;
+  if (slots) booking.slots = slots;
+  if (year !== undefined) booking.year = year;
+  if (month !== undefined) booking.month = month;
+  if (date !== undefined) booking.date = date;
+
+  await booking.save();
+
+  res.status(200).json({ 
+    success: true, 
+    message: 'Booking updated successfully',
+    booking 
+  });
+});
+
+
 export const deleteBooking = TryCatch(async (req, res, next) => {
   const { court, id } = req.params;
 

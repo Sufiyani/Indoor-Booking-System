@@ -45,7 +45,7 @@ const AdminDashboard = () => {
               Add, edit, or remove court bookings.
             </p>
             <button
-              onClick={() => navigate("/admin/manage-booking")}
+              onClick={() => navigate("/admin/manage-bookings")}
               className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-2 rounded-xl text-white font-semibold hover:opacity-90 transition duration-300"
             >
               Go
@@ -59,7 +59,9 @@ const AdminDashboard = () => {
               Check your court reservation schedule
             </p>
             <button
-              onClick={() => navigate("/admin/courtcards")}
+              // onClick={() => navigate("/admin/courtcards")}
+               onClick={() => navigate("/admin/view-booking-page")}
+           
               className="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-2 rounded-xl text-white font-semibold hover:opacity-90 transition duration-300"
             >
               Go
