@@ -62,39 +62,37 @@ Frontend: http://localhost:3000
 
 Backend: http://localhost:5000
 
-🗄️ Database Overview
+## 🗄️ Database Overview
 
-users → Stores user information
+- **users** → Stores user information  
+- **admins** → Stores admin credentials  
+- **bookings** → Stores booking details  
+- **slots** → Manages available time slots for each ground  
 
-admins → Stores admin credentials
+---
 
-bookings → Stores booking details
+## 📄 PDF Booking Confirmation
 
-slots → Manages available time slots for each ground
+Each successful booking automatically generates a **PDF receipt** including:  
+- **User details**  
+- **Selected ground**  
+- **Booking date and time**  
+- **Payment confirmation**  
 
-📄 PDF Booking Confirmation
+---
 
-Each successful booking automatically generates a PDF receipt including:
+## 👨‍💻 Author
 
-User details
+**Sufiyan Imran**  
+*Full-Stack Web Developer | MERN Stack*  
 
-Selected ground
+📧 **Email:** sufiyanimran55@gmail.com  
+🐙 **GitHub:** [sufiyanimran](https://github.com/Sufiyani)  
+💼 **LinkedIn:** [sufiyanimran](https://www.linkedin.com/in/sufiyanimran/)  
 
-Booking date and time
+---
 
-Payment confirmation
+## 🏁 Summary
 
-👨‍💻 Author
-
-Sufiyan Imran
-Full-Stack Web Developer | MERN Stack
-📧 Email: sufiyanimran55@gmail.com
-
-🐙 GitHub: sufiyanimran
-
-💼 LinkedIn: sufiyanimran
-
-🏁 Summary
-
-The Indoor Booking System is a fully functional, database-driven MERN Stack web app built with a monolithic architecture.
-It provides a seamless experience for users to book indoor sports facilities and for admins to manage bookings, payments, and availability — all in one place.
+The **Indoor Booking System** is a **fully functional, database-driven MERN Stack web application** built with a **monolithic architecture**.  
+It provides a **seamless experience** for users to book indoor sports facilities and for admins to manage **bookings, payments, and availability** — all in one place.
