@@ -42,7 +42,7 @@ Users can explore and book available time slots for **Cricket**, **Futsal**, and
    cd indoor-booking-system
    
 Install dependencies
-
+```bash
 npm install
 
 Add environment variables
