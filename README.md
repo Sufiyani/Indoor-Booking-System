@@ -44,7 +44,7 @@ Users can explore and book available time slots for **Cricket**, **Futsal**, and
 Install dependencies
 ```bash
 npm install
-   ```bash
+```
 
 Add environment variables
 Create a .env file in the root directory:
