@@ -48,12 +48,15 @@ npm install
 
 Add environment variables
 Create a .env file in the root directory:
-
+```bash
 MONGO_URI=your_mongodb_connection_string
 PORT=5000
+```
 
 Start the development server
+```bash
 npm run dev
+```
 
 Frontend: http://localhost:3000
 
