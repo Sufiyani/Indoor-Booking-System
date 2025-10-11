@@ -51,35 +51,35 @@ const AdminLogin = () => {
   const closePopup = () => setShowPopup(false);
 
   return (
-    <div className="py-16 px-6 bg-black min-h-screen flex items-center justify-center">
-      <div className="w-11/12 max-w-2xl bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
-        <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent mb-8 animate-pulse">
+    <div className="py-16 px-6 min-h-screen flex items-center justify-center">
+      <div className="w-11/12 max-w-2xl bg-[#1e9797]/20 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
+        <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-[#1a6868] to-[#9de9e9] bg-clip-text text-transparent mb-8 animate-pulse">
           Admin Login
         </h2>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-gray-300 mb-2 font-medium">Name</label>
+            <label className="block text-gray-600 mb-2 font-medium">Name</label>
             <input
               type="text"
               name="name"
               placeholder="Enter your name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-5 py-3 rounded-2xl bg-gray-700/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300"
+              className="w-full px-5 py-3 rounded-2xl bg-[#1e9797]/40 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300"
               required
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2 font-medium">Password</label>
+            <label className="block text-gray-600 mb-2 font-medium">Password</label>
             <input
               type="password"
               name="password"
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-5 py-3 rounded-2xl bg-gray-700/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300"
+              className="w-full px-5 py-3 rounded-2xl bg-[#1e9797]/40 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300"
               required
             />
           </div>
@@ -87,13 +87,13 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-red-500 hover:to-orange-500 text-white font-semibold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-[#1a6868] via-[#49baba] to-[#9de9e9] hover:from-[#258181] hover:via-[#5fd1d1] hover:to-[#b2f0f0] text-white font-bold rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="text-gray-400 text-sm mt-4 text-center">
+        <p className="text-gray-600 text-sm mt-4 text-center">
           Only authorized admins can access the dashboard.
         </p>
       </div>

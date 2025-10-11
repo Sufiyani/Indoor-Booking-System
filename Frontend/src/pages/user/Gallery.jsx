@@ -32,10 +32,11 @@ const GalleryCards = () => {
   return (
     <div id="gallery" className="py-16 px-6 bg-transparent ml-15 mr-15">
       <div className="w-[90%] mx-auto text-center mb-12">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-3">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#258181] to-[#9de9e9] bg-clip-text text-transparent mb-3">
           Choose Your Game
         </h1>
-        <p className="text-white text-lg max-w-3xl mx-auto">
+
+        <p className="text-gray-600 font-semibold text-lg max-w-3xl mx-auto">
           Premium sports facilities at your fingertips
         </p>
       </div>
@@ -44,7 +45,7 @@ const GalleryCards = () => {
         {sports.map((sport, index) => (
           <div
             key={index}
-            className="group relative bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-4 hover:-translate-y-2 transition-transform duration-500 border border-white/20 cursor-pointer"
+            className="group relative bg-[#1e9797]/20 backdrop-blur-xl rounded-2xl shadow-xl p-4 hover:-translate-y-2 transition-transform duration-500 border border-white/20 cursor-pointer"
             onClick={() => navigate(sport.path)} // ✅ navigate on card click
           >
             {/* Image */}
@@ -58,7 +59,7 @@ const GalleryCards = () => {
 
               {/* Title overlay */}
               <div className="absolute bottom-4 left-4 right-4">
-                <h2 className="text-3xl font-bold text-white drop-shadow-lg">
+                <h2 className="text-3xl font-bold text-[#FFFDEB] drop-shadow-lg">
                   {sport.title}
                 </h2>
               </div>
@@ -66,7 +67,7 @@ const GalleryCards = () => {
 
             {/* Content */}
             <div className="mt-4 text-left">
-              <p className="text-gray-300 text-base mb-4 leading-relaxed">
+              <p className="text-gray-600 font-semibold text-base mb-4 leading-relaxed">
                 {sport.description}
               </p>
               <button
@@ -74,7 +75,7 @@ const GalleryCards = () => {
                   e.stopPropagation(); // ✅ prevent parent click from firing
                   navigate(sport.path);
                 }}
-                className="w-full bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white font-semibold px-4 py-2 rounded-xl shadow-lg hover:shadow-orange-500/50 transition duration-300"
+                className="w-full bg-gradient-to-r from-[#258181] to-[#9de9e9] text-white font-bold font-sans px-4 py-2 rounded-xl shadow-lg hover:shadow-[#1e9797]/50 transition duration-300"
               >
                 Book Now
               </button>

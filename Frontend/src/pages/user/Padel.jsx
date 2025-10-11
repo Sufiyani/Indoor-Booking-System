@@ -5,7 +5,7 @@ import bookingService from "../../services/bookingService";
 const Padel = () => {
   const navigate = useNavigate();
 
-  const years = [2023, 2024, 2025];
+  const years = [2025,2026,2027];
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -23,7 +23,6 @@ const Padel = () => {
 
   const slotsRef = useRef(null);
 
-  // ✅ Fetch booked slots for Padel
   useEffect(() => {
     const fetchBookings = async () => {
       setIsLoading(true);
@@ -77,13 +76,7 @@ const Padel = () => {
     }
   };
 
-  // ✅ Save booking to localStorage and navigate
   const handleBookNow = () => {
-    if (selectedSlots.length === 0) {
-      alert("Please select at least one slot");
-      return;
-    }
-
     const bookingData = {
       year: selectedYear,
       month: selectedMonth,
@@ -118,6 +111,7 @@ const Padel = () => {
   };
 
   const calendar = generateCalendar(selectedYear, selectedMonth);
+
   const timeSlots = Array.from({ length: 24 }, (_, i) => {
     const start = i % 12 === 0 ? 12 : i % 12;
     const end = (i + 1) % 12 === 0 ? 12 : (i + 1) % 12;
@@ -130,10 +124,13 @@ const Padel = () => {
   const bookedForDate = bookedSlots[key] || [];
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative">
+    <div className="min-h-screen bg-[#FFFDEB] text-white flex flex-col md:flex-row relative">
       {/* Sidebar */}
-      <div className="md:w-1/4 w-full bg-gray-900 p-4 md:p-6 border-r border-gray-700">
-        <h2 className="text-2xl font-bold mb-4 text-center md:text-left">Select Year</h2>
+      <div className="md:w-1/4 w-full bg-[#1e9797]/10 text-gray-600 font-bold p-4 md:p-6 border-r border-[#1e9797]">
+        <h2 className="text-2xl font-bold mb-4 text-center md:text-left mt-15 bg-gradient-to-r from-[#1a6868] to-[#9de9e9] bg-clip-text text-transparent">
+          Select Year
+        </h2>
+
         <div className="flex flex-wrap gap-3 mb-6 justify-center md:justify-start">
           {years.map((year) => (
             <button
@@ -143,11 +140,10 @@ const Padel = () => {
                 setSelectedDate(null);
                 setSelectedSlots([]);
               }}
-              className={`px-4 py-2 rounded-lg transition ${
-                selectedYear === year
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600"
-                  : "bg-gray-700 hover:bg-gray-600"
-              }`}
+              className={`px-4 py-2 rounded-lg transition ${selectedYear === year
+                ? "bg-gradient-to-r from-[#258181] to-[#8cd3d3]"
+                : "bg-[#1e9797]/20 hover:bg-[#087e7e]"
+                }`}
             >
               {year}
             </button>
@@ -164,11 +160,10 @@ const Padel = () => {
                 setSelectedDate(null);
                 setSelectedSlots([]);
               }}
-              className={`cursor-pointer px-3 py-2 rounded-lg transition ${
-                selectedMonth === index
-                  ? "bg-blue-600 text-white"
-                  : "hover:bg-gray-700"
-              }`}
+              className={`cursor-pointer px-3 py-2 rounded-lg transition ${selectedMonth === index
+                ? "bg-gradient-to-r from-[#258181] to-[#8cd3d3] text-white"
+                : "hover:bg-[#087e7e]"
+                }`}
             >
               {month}
             </li>
@@ -177,8 +172,8 @@ const Padel = () => {
       </div>
 
       {/* Main Content */}
-      <div className="md:w-3/4 w-full p-4 md:p-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+      <div className="md:w-3/4 w-full p-4 md:p-8 mt-15">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2 bg-gradient-to-r from-[#258181] to-[#8cd3d3] bg-clip-text text-transparent">
           Padel Court Booking
         </h1>
         <p className="text-sm sm:text-base text-gray-400 text-center mb-6">
@@ -186,7 +181,7 @@ const Padel = () => {
         </p>
 
         {isLoading && (
-          <div className="text-center text-blue-400 mb-4">
+          <div className="text-center text-[#1e9797] mb-4">
             Loading bookings...
           </div>
         )}
@@ -194,7 +189,7 @@ const Padel = () => {
         {/* Calendar */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center mb-6">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="font-semibold text-blue-400 text-xs sm:text-sm">{day}</div>
+            <div key={day} className="font-semibold text-[#1e9797] text-xs sm:text-sm">{day}</div>
           ))}
           {calendar.map((week, i) =>
             week.map((day, j) => (
@@ -207,8 +202,8 @@ const Padel = () => {
                   }
                 }}
                 className={`h-10 sm:h-14 flex items-center justify-center rounded-lg text-xs sm:text-sm transition
-                  ${day ? "bg-gray-800 hover:bg-blue-600 cursor-pointer" : ""}
-                  ${selectedDate === day ? "bg-blue-600 font-bold" : ""}`}
+                  ${day ? "bg-[#1e9797]/10 text-gray-800 hover:bg-[#179c9c] cursor-pointer" : ""} 
+                  ${selectedDate === day ? "font-bold" : ""}`}
               >
                 {day || ""}
               </div>
@@ -219,19 +214,19 @@ const Padel = () => {
         {/* Slots Section */}
         {selectedDate && (
           <div ref={slotsRef} className="w-full mt-6">
-            <h2 className="text-xl font-bold text-center mb-4 text-blue-400">
+            <h2 className="text-xl font-bold text-center mb-4 text-[#1e9797]">
               {months[selectedMonth]} {selectedDate}, {selectedYear}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Time Slots */}
-              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
-                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
+              <div className="bg-[#1e9797]/10 p-4 rounded-lg overflow-auto max-h-full">
+                <h3 className="text-lg font-bold mb-3 flex items-center justify-center sticky top-0 bg-[#1e9797]/30 h-14 rounded text-[#1e9797]">
                   Time Slots
                 </h3>
                 <ul className="space-y-1 text-xs sm:text-sm">
                   {timeSlots.map((slot, index) => (
-                    <li key={index} className="h-10 px-3 py-2 rounded bg-gray-800 flex items-center">
+                    <li key={index} className="h-10 px-3 py-2 rounded bg-[#1e9797]/30 flex items-center">
                       {slot}
                     </li>
                   ))}
@@ -239,8 +234,8 @@ const Padel = () => {
               </div>
 
               {/* Available Slots */}
-              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
-                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
+              <div className="bg-[#1e9797]/10 p-4 rounded-lg overflow-auto max-h-full">
+                <h3 className="text-lg font-bold mb-3 flex items-center justify-center sticky top-0 bg-[#1e9797]/30 h-14 rounded text-[#1e9797]">
                   Available Slots
                 </h3>
                 <ul className="space-y-1 text-xs sm:text-sm">
@@ -249,12 +244,12 @@ const Padel = () => {
                       key={index}
                       onClick={() => handleSlotClick(index)}
                       className={`h-10 flex items-center justify-center rounded transition cursor-pointer
-                      ${selectedSlots.includes(index) 
-                        ? "bg-blue-600 text-white font-bold scale-105" 
-                        : bookedForDate.includes(index)
-                        ? "bg-gray-700 cursor-not-allowed opacity-50"
-                        : "bg-gray-800 hover:bg-blue-600 hover:scale-105"
-                      }`}
+                      ${selectedSlots.includes(index)
+                          ? "bg-[#1a6868] text-white font-bold scale-105"
+                          : bookedForDate.includes(index)
+                            ? "bg-[#1e9797]/30 cursor-not-allowed opacity-50"
+                            : "bg-[#1e9797]/30 hover:bg-[#53c7c7] hover:scale-105"
+                        }`}
                     >
                       {selectedSlots.includes(index) ? (
                         <span className="text-2xl">🎾</span>
@@ -269,19 +264,19 @@ const Padel = () => {
               </div>
 
               {/* Booked Slots */}
-              <div className="bg-gray-900 p-4 rounded-lg overflow-auto max-h-[500px]">
-                <h3 className="text-lg font-bold mb-3 text-center sm:text-left sticky top-0 bg-gray-900 pb-2">
-                  Confirmed Bookings
+              <div className="bg-[#1e9797]/10 p-4 rounded-lg overflow-auto max-h-full">
+                <h3 className="text-lg font-bold mb-3 flex items-center justify-center sticky top-0 bg-[#1e9797]/30 h-14 rounded text-[#1e9797]">
+                  Confirmed Booking
                 </h3>
                 <ul className="space-y-1 text-xs sm:text-sm">
                   {Array(24).fill(null).map((_, index) => (
                     <li
                       key={index}
                       className={`h-10 flex items-center justify-center rounded cursor-not-allowed
-                      ${bookedForDate.includes(index) 
-                        ? "bg-blue-900 text-white font-bold" 
-                        : "bg-gray-800"
-                      }`}
+                      ${bookedForDate.includes(index)
+                          ? "bg-[#1e9797] text-white font-bold"
+                          : "bg-[#1e9797]/30"
+                        }`}
                     >
                       {bookedForDate.includes(index) && (
                         <span className="text-2xl">🎾</span>
@@ -294,15 +289,15 @@ const Padel = () => {
           </div>
         )}
 
-        {/* ✅ Book Now Button */}
+        {/* Book Now Button */}
         {selectedSlots.length > 0 && (
           <div className="mt-6 flex justify-between items-center">
-            <p className="text-blue-400 font-semibold">
+            <p className="text-[#1a6868] font-semibold">
               {selectedSlots.length} slot{selectedSlots.length > 1 ? 's' : ''} selected
             </p>
             <button
               onClick={() => setShowConfirmPopup(true)}
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg font-semibold transition transform hover:scale-105"
+              className="px-8 py-3 bg-gradient-to-r from-[#1a6868] to-[#9de9e9] hover:bg-[#087e7e] rounded-lg font-semibold transition transform hover:scale-105"
             >
               Book Now
             </button>
@@ -313,12 +308,12 @@ const Padel = () => {
       {/* Popups */}
       {showPopup && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
-          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
-            <h2 className="text-lg font-bold mb-4 text-blue-400">Limit Reached</h2>
-            <p>You can only book up to 3 slots.</p>
+          <div className="bg-[#1e9797]/70 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-white">Limit Reached</h2>
+            <p>You can only book up to 3 slots in one payment.</p>
             <button
               onClick={() => setShowPopup(false)}
-              className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+              className="mt-5 px-6 py-2 bg-green-600 rounded hover:bg-[#109116] transition"
             >
               OK
             </button>
@@ -328,12 +323,12 @@ const Padel = () => {
 
       {showBookedPopup && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
-          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
-            <h2 className="text-lg font-bold mb-4 text-blue-400">Slot Already Booked</h2>
+          <div className="bg-[#1e9797]/70 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-white">Slot Already Booked</h2>
             <p>This slot is not available. Please choose another one.</p>
             <button
               onClick={() => setShowBookedPopup(false)}
-              className="mt-5 px-6 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+              className="mt-5 px-6 py-2 bg-green-600 rounded hover:bg-[#109116] transition"
             >
               OK
             </button>
@@ -341,11 +336,10 @@ const Padel = () => {
         </div>
       )}
 
-      {/* ✅ Confirmation Popup */}
       {showConfirmPopup && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-50">
-          <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
-            <h2 className="text-lg font-bold mb-4 text-blue-400">Confirm Booking</h2>
+          <div className="bg-[#1e9797]/70 text-white p-6 rounded-lg shadow-lg text-center w-11/12 sm:w-[320px]">
+            <h2 className="text-lg font-bold mb-4 text-white">Confirm Booking</h2>
             <p>Are you sure you want to book these slots?</p>
             <div className="flex justify-center gap-4 mt-5">
               <button
@@ -353,13 +347,13 @@ const Padel = () => {
                   setShowConfirmPopup(false);
                   handleBookNow();
                 }}
-                className="px-5 py-2 bg-blue-600 rounded hover:bg-blue-700 transition"
+                className="px-5 py-2 bg-green-600 rounded hover:bg-[#109116] transition"
               >
                 Yes
               </button>
               <button
                 onClick={() => setShowConfirmPopup(false)}
-                className="px-5 py-2 bg-gray-600 rounded hover:bg-gray-700 transition"
+                className="px-5 py-2 bg-red-800 rounded hover:bg-[#a52424] transition"
               >
                 Cancel
               </button>

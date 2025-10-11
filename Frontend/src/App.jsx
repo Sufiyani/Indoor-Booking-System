@@ -35,11 +35,9 @@ const App = () => {
   const isAdminDashboard = location.pathname === "/admin/dashboard";
 
   return (
-    <div className="bg-black min-h-screen flex flex-col">
+    <div className="bg-[#FFFDEB] min-h-screen flex flex-col">
       {/* Navbar */}
-      {/* <NavbarSection /> */}
-
-    
+      <NavbarSection />
       <div className="flex-grow">
         <Routes>
        

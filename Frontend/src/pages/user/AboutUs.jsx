@@ -5,12 +5,12 @@ const AboutUs = () => {
         <div id="about us" className="py-16 px-6 bg-transparent">
             <div className="w-[90%] mx-auto text-center">
                 {/* Heading */}
-                <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-6">
+                <h1 className="text-5xl font-bold bg-gradient-to-r from-[#1a6868] to-[#9de9e9] bg-clip-text text-transparent mb-6">
                     About Us
                 </h1>
-                <p className="text-white text-lg max-w-3xl mx-auto mb-12 leading-relaxed">
+                <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-12 leading-relaxed">
                     Indoor Management System was established in{" "}
-                    <span className="font-semibold text-orange-400">August 2023</span>
+                    <span className="font-semibold text-gray-400">August 2023 </span>
                     in North Nazimabad, Karachi. Our goal is to provide a modern and seamless way for sports enthusiasts
                     to manage bookings, explore indoor games, and enjoy premium facilities under one roof.
                     Since our launch, we have been committed to creating a hub where players of all ages can connect,
@@ -22,9 +22,9 @@ const AboutUs = () => {
                 {/* Content Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                     {/* Mission */}
-                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
-                        <h2 className="text-2xl font-semibold text-white mb-3">Our Mission</h2>
-                        <p className="text-gray-300 leading-relaxed">
+                    <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
+                        <h2 className="text-2xl font-semibold text-[#1e9797] mb-3">Our Mission</h2>
+                        <p className="text-gray-600 leading-relaxed">
                             Our mission is to revolutionize the indoor games industry by
                             blending innovation with accessibility. We strive to create a platform
                             where booking courts and managing schedules is as simple as a few clicks.
@@ -35,9 +35,9 @@ const AboutUs = () => {
                     </div>
 
                     {/* Role */}
-                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
-                        <h2 className="text-2xl font-semibold text-white mb-3">Our Role</h2>
-                        <p className="text-gray-300 leading-relaxed">
+                    <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
+                        <h2 className="text-2xl font-semibold text-[#1e9797] mb-3">Our Role</h2>
+                        <p className="text-gray-600 leading-relaxed">
                             We see ourselves as a bridge between passionate players and modern
                             indoor facilities. By connecting communities with state-of-the-art
                             cricket pitches, futsal arenas, and padel courts, we simplify access
@@ -49,9 +49,9 @@ const AboutUs = () => {
                     </div>
 
                     {/* Vision */}
-                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
-                        <h2 className="text-2xl font-semibold text-white mb-3">Our Vision</h2>
-                        <p className="text-gray-300 leading-relaxed">
+                    <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 hover:-translate-y-2 transition-transform duration-500 border border-white/20">
+                        <h2 className="text-2xl font-semibold text-[#1e9797] mb-3">Our Vision</h2>
+                        <p className="text-gray-600 leading-relaxed">
                             Our vision is to become a leading force in the indoor games industry,
                             recognized for setting new standards in convenience, quality, and
                             community engagement. We aspire to build a thriving ecosystem where

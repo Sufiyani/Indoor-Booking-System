@@ -30,7 +30,7 @@ const ContactUs = () => {
     <div id="contact us" className="py-16 px-6 bg-transparent">
       <div className="w-[90%] mx-auto text-center">
         {/* Heading */}
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-6">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#1a6868] to-[#9de9e9] bg-clip-text text-transparent mb-6">
           Contact Us
         </h1>
         <p className="text-white text-lg max-w-3xl mx-auto mb-12 leading-relaxed">
@@ -42,30 +42,30 @@ const ContactUs = () => {
         {/* Contact Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-12">
           {/* Email */}
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
-            <Mail className="mx-auto text-orange-400 w-10 h-10 mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Email Us</h2>
-            <p className="text-gray-300">info@gmail.com</p>
+          <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
+            <Mail className="mx-auto text-[#1e9797] w-10 h-10 mb-4" />
+            <h2 className="text-xl font-semibold text-[#1e9797] mb-2">Email Us</h2>
+            <p className="text-gray-600">info@gmail.com</p>
           </div>
 
           {/* Phone */}
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
-            <Phone className="mx-auto text-orange-400 w-10 h-10 mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Call Us</h2>
-            <p className="text-gray-300">+92 330 1234567</p>
+          <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
+            <Phone className="mx-auto text-[#1e9797] w-10 h-10 mb-4" />
+            <h2 className="text-xl font-semibold text-[#1e9797] mb-2">Call Us</h2>
+            <p className="text-gray-600">+92 330 1234567</p>
           </div>
 
           {/* Location */}
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
-            <MapPin className="mx-auto text-orange-400 w-10 h-10 mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Visit Us</h2>
-            <p className="text-gray-300">North Nazimabad, Karachi</p>
+          <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-center border border-white/20">
+            <MapPin className="mx-auto text-[#1e9797] w-10 h-10 mb-4" />
+            <h2 className="text-xl font-semibold text-[#1e9797] mb-2">Visit Us</h2>
+            <p className="text-gray-600">North Nazimabad, Karachi</p>
           </div>
         </div>
 
         {/* Contact Form */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-white/20 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-white mb-6 text-center">
+        <div className="bg-[#1e9797]/10 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-[#1e9797]/20 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold text-[#1e9797] mb-6 text-center">
             Send Us a Message
           </h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
@@ -76,7 +76,7 @@ const ContactUs = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="p-3 rounded-xl bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="p-3 rounded-xl bg-[#1e9797]/20 text-gray-800 placeholder-gray-400 border border-[#1e9797]/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <input
               type="email"
@@ -85,7 +85,7 @@ const ContactUs = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="p-3 rounded-xl bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="p-3 rounded-xl bg-[#1e9797]/20 text-gray-800 placeholder-gray-400 border border-[#1e9797]/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <textarea
               name="message"
@@ -94,11 +94,11 @@ const ContactUs = () => {
               value={formData.message}
               onChange={handleChange}
               required
-              className="p-3 rounded-xl bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="p-3 rounded-xl bg-[#1e9797]/20 text-gray-800 placeholder-gray-400 border border-[#1e9797]/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
             ></textarea>
             <button
               type="submit"
-              className="bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 rounded-xl hover:opacity-90 transition duration-300"
+              className="bg-gradient-to-r from-[#258181] to-[#9de9e9] font-bold text-white py-3 rounded-xl hover:opacity-90 transition duration-300"
             >
               Send Message
             </button>
@@ -107,13 +107,13 @@ const ContactUs = () => {
 
         {/* Social Icons */}
         <div className="flex justify-center gap-6 mt-10">
-          <a href="#" className="text-orange-400 hover:text-white transition">
+          <a href="#" className="text-[#1e9797] hover:text-[#087e7e] transition">
             <Facebook size={28} />
           </a>
-          <a href="#" className="text-orange-400 hover:text-white transition">
+          <a href="#" className="text-[#1e9797] hover:text-[#087e7e] transition">
             <Instagram size={28} />
           </a>
-          <a href="#" className="text-orange-400 hover:text-white transition">
+          <a href="#" className="text-[#1e9797] hover:text-[#087e7e] transition">
             <Twitter size={28} />
           </a>
         </div>

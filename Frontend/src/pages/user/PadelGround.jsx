@@ -15,7 +15,7 @@ const PadelGround = () => {
     <div id="padel-ground" className="py-16 px-6 bg-transparent mt-15">
       <div className="w-[90%] mx-auto text-center">
         {/* Heading */}
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-8">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#1a6868] to-[#9de9e9] bg-clip-text text-transparent mb-8">
           Padel Court Gallery
         </h1>
 
@@ -24,7 +24,7 @@ const PadelGround = () => {
           {courtImages.map((url, index) => (
             <div
               key={index}
-              className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl p-2 border border-white/20"
+              className="bg-[#1e9797]/30 backdrop-blur-xl rounded-2xl shadow-xl p-2 border border-white/20"
             >
               <img
                 src={url}
@@ -39,7 +39,7 @@ const PadelGround = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate("/padel")}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-orange-500/50 transition duration-300"
+            className="px-6 py-3 bg-gradient-to-r from-[#1a6868] to-[#89cfcf] text-white font-semibold rounded-xl shadow-lg hover:shadow-[#1a6868]/50 transition duration-300"
           >
             Book Padel Court Now
           </button>

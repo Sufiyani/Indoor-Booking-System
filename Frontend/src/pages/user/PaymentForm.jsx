@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createBooking } from "../../services/bookingService";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { CheckCircle, XCircle, AlertCircle, Download } from "lucide-react";
 
 const PaymentPage = () => {
   const [booking, setBooking] = useState(null);
@@ -10,6 +11,7 @@ const PaymentPage = () => {
     paymentMethod: "",
   });
   const [paymentDone, setPaymentDone] = useState(false);
+  const [popup, setPopup] = useState({ show: false, type: "", message: "" });
 
   const timeSlots = Array.from({ length: 24 }, (_, i) => {
     const startHour = i % 12 === 0 ? 12 : i % 12;
@@ -24,6 +26,11 @@ const PaymentPage = () => {
     if (data) setBooking(data);
   }, []);
 
+  const showPopup = (type, message) => {
+    setPopup({ show: true, type, message });
+    setTimeout(() => setPopup({ show: false, type: "", message: "" }), 3000);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -32,11 +39,11 @@ const PaymentPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.paymentMethod) {
-      alert("Please fill all fields before proceeding.");
+      showPopup("error", "Please fill all fields before proceeding.");
       return;
     }
     if (!booking) {
-      alert("No booking found. Please select a slot again.");
+      showPopup("error", "No booking found. Please select a slot again.");
       return;
     }
 
@@ -52,14 +59,14 @@ const PaymentPage = () => {
       const res = await createBooking(payload);
       if (res.success) {
         setPaymentDone(true);
-        alert("Payment successful and booking confirmed!");
+        showPopup("success", "Payment successful and booking confirmed!");
         localStorage.removeItem("pendingBooking");
       } else {
-        alert("Booking failed. Try again later.");
+        showPopup("error", "Booking failed. Try again later.");
       }
     } catch (error) {
       console.error(error);
-      alert("Error creating booking. Check console for details.");
+      showPopup("error", "Error creating booking. Check console for details.");
     }
   };
 
@@ -68,12 +75,12 @@ const PaymentPage = () => {
       console.log("Starting PDF generation...");
       
       if (!booking) {
-        alert("No booking data available!");
+        showPopup("error", "No booking data available!");
         return;
       }
 
       if (!formData.name || !formData.email) {
-        alert("User information missing!");
+        showPopup("error", "User information missing!");
         return;
       }
 
@@ -86,7 +93,6 @@ const PaymentPage = () => {
       const { name, email } = formData;
       const { court, slots, date, month, year } = booking;
       
-      // Group continuous slots together
       const sortedSlots = [...slots].sort((a, b) => a - b);
       const groupedSlots = [];
       let currentGroup = [sortedSlots[0]];
@@ -101,7 +107,6 @@ const PaymentPage = () => {
       }
       groupedSlots.push(currentGroup);
 
-      // Convert grouped slots to time ranges
       const bookedTimeSlots = groupedSlots.map(group => {
         const firstSlot = group[0];
         const lastSlot = group[group.length - 1];
@@ -112,7 +117,6 @@ const PaymentPage = () => {
 
       console.log("Drawing PDF design...");
       
-      // Header
       page.drawText("BOOKING CONFIRMATION", {
         x: 50,
         y: 700,
@@ -128,7 +132,6 @@ const PaymentPage = () => {
         color: rgb(1, 0.4, 0),
       });
 
-      // Status
       page.drawText("Status: CONFIRMED", {
         x: 50,
         y: 660,
@@ -139,7 +142,6 @@ const PaymentPage = () => {
 
       let yPos = 620;
 
-      // Customer Details
       page.drawText("Customer Details", {
         x: 50,
         y: yPos,
@@ -212,7 +214,6 @@ const PaymentPage = () => {
         color: rgb(0, 0.6, 0),
       });
 
-      // Booking Details
       yPos -= 50;
       page.drawText("Booking Details", {
         x: 50,
@@ -275,7 +276,6 @@ const PaymentPage = () => {
         yPos -= 20;
       });
 
-      // Footer
       page.drawLine({
         start: { x: 50, y: 100 },
         end: { x: 550, y: 100 },
@@ -316,20 +316,59 @@ const PaymentPage = () => {
       setTimeout(() => URL.revokeObjectURL(url), 100);
       
       console.log("PDF downloaded successfully!");
-      alert("PDF downloaded successfully!");
+      showPopup("success", "PDF downloaded successfully!");
       
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert(`Failed to generate PDF: ${error.message}`);
+      showPopup("error", `Failed to generate PDF: ${error.message}`);
     }
   };
 
+  const PopupMessage = () => {
+    if (!popup.show) return null;
+
+    const getPopupStyles = () => {
+      switch (popup.type) {
+        case "success":
+          return {
+            bg: "bg-gradient-to-r from-green-500 to-emerald-500",
+            icon: <CheckCircle className="w-6 h-6" />,
+          };
+        case "error":
+          return {
+            bg: "bg-gradient-to-r from-red-500 to-rose-500",
+            icon: <XCircle className="w-6 h-6" />,
+          };
+        default:
+          return {
+            bg: "bg-gradient-to-r from-blue-500 to-cyan-500",
+            icon: <AlertCircle className="w-6 h-6" />,
+          };
+      }
+    };
+
+    const styles = getPopupStyles();
+
+    return (
+      <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50 animate-slideDown">
+        <div
+          className={`${styles.bg} text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 min-w-[320px] max-w-md`}
+        >
+          {styles.icon}
+          <p className="font-medium text-sm">{popup.message}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-white bg-black px-6 py-10">
+    <div className="min-h-screen flex flex-col items-center justify-center text-[#1e9797] px-6 py-10">
+      <PopupMessage />
+      
       <h1 className="text-3xl font-bold mb-8">Payment Page</h1>
 
       {booking ? (
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <div className="bg-[#1e9797]/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8 w-full max-w-md">
           {!paymentDone ? (
             <>
               <p className="text-center text-lg mb-2">
@@ -359,14 +398,14 @@ const PaymentPage = () => {
                 );
               })()}
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-5">
                 <input
                   type="text"
                   name="name"
                   placeholder="Enter your name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-4 py-2 rounded-lg bg-[#1e9797]/30 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <input
                   type="email"
@@ -374,13 +413,13 @@ const PaymentPage = () => {
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-4 py-2 rounded-lg bg-[#1e9797]/30 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <select
                   name="paymentMethod"
                   value={formData.paymentMethod}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-4 py-2 rounded-lg bg-[#1e9797]/30 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="">Select a payment method</option>
                   <option value="Cash">Cash</option>
@@ -388,25 +427,26 @@ const PaymentPage = () => {
                 </select>
 
                 <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-300"
+                  onClick={handleSubmit}
+                  className="w-full bg-gradient-to-r from-[#1a6868] to-[#89cfcf] text-white font-bold py-2 rounded-lg hover:opacity-90 transition duration-300"
                 >
                   Confirm Payment
                 </button>
-              </form>
+              </div>
             </>
           ) : (
             <div className="text-center">
-              <h2 className="text-2xl text-green-400 font-bold mb-4">
+              <h2 className="text-2xl text-[#1e9797] font-bold mb-4">
                 Payment Successful!
               </h2>
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-800 mb-6">
                 Your booking has been confirmed successfully.
               </p>
               <button
                 onClick={generatePDF}
-                className="bg-gradient-to-r from-green-500 to-teal-500 px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-300"
+                className="bg-gradient-to-r from-[#1a6868] to-[#9de9e9] text-white font-bold px-6 py-2 rounded-lg hover:opacity-90 transition duration-300 flex items-center gap-2 mx-auto"
               >
+                <Download className="w-5 h-5" />
                 Download Booking PDF
               </button>
             </div>
@@ -415,9 +455,24 @@ const PaymentPage = () => {
       ) : (
         <p className="text-gray-400">No pending booking found.</p>
       )}
+
+      <style jsx>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translate(-50%, -100%);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
 
 export default PaymentPage;
-
