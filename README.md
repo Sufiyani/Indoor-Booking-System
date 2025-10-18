@@ -84,7 +84,7 @@ Each successful booking automatically generates a **PDF receipt** including:
 ## 👨‍💻 Author
 
 **Sufiyan Imran**  
-*Full-Stack Web Developer | MERN Stack*  
+*Frontend Developer | MERN Stack*  
 
 📧 **Email:** sufiyanimran55@gmail.com  
 🐙 **GitHub:** [sufiyanimran](https://github.com/Sufiyani)  
